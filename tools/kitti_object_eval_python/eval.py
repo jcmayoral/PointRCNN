@@ -648,23 +648,23 @@ def get_official_eval_result(gt_annos, dt_annos, current_classes):
         # mAP result: [num_class, num_diff, num_minoverlap]
         for i in range(min_overlaps.shape[0]):
             result += print_str(
-                (f"{class_to_name[curcls]} "
+                ("{class_to_name[curcls]} " +
                  "AP@{:.2f}, {:.2f}, {:.2f}:".format(*min_overlaps[i, :, j])))
-            result += print_str((f"bbox AP:{mAPbbox[j, 0, i]:.4f}, "
-                                 f"{mAPbbox[j, 1, i]:.4f}, "
-                                 f"{mAPbbox[j, 2, i]:.4f}"))
-            result += print_str((f"bev  AP:{mAPbev[j, 0, i]:.4f}, "
-                                 f"{mAPbev[j, 1, i]:.4f}, "
-                                 f"{mAPbev[j, 2, i]:.4f}"))
-            result += print_str((f"3d   AP:{mAP3d[j, 0, i]:.4f}, "
-                                 f"{mAP3d[j, 1, i]:.4f}, "
-                                 f"{mAP3d[j, 2, i]:.4f}"))
+            result += print_str(("bbox AP:{mAPbbox[j, 0, i]:.4f}, "
+                                 "{mAPbbox[j, 1, i]:.4f}, "
+                                 "{mAPbbox[j, 2, i]:.4f}"))
+            result += print_str(("bev  AP:{mAPbev[j, 0, i]:.4f}, "
+                                 "{mAPbev[j, 1, i]:.4f}, "
+                                 "{mAPbev[j, 2, i]:.4f}"))
+            result += print_str(("3d   AP:{mAP3d[j, 0, i]:.4f}, "
+                                 "{mAP3d[j, 1, i]:.4f}, "
+                                 "{mAP3d[j, 2, i]:.4f}"))
 
 
             if compute_aos:
-                result += print_str((f"aos  AP:{mAPaos[j, 0, i]:.2f}, "
-                                     f"{mAPaos[j, 1, i]:.2f}, "
-                                     f"{mAPaos[j, 2, i]:.2f}"))
+                result += print_str(("aos  AP:{mAPaos[j, 0, i]:.2f}, "
+                                     "{mAPaos[j, 1, i]:.2f}, "
+                                     "{mAPaos[j, 2, i]:.2f}"))
     ret_dict['Car_3d_easy'] = mAP3d[0, 0, 0]
     ret_dict['Car_3d_moderate'] = mAP3d[0, 1, 0]
     ret_dict['Car_3d_hard'] = mAP3d[0, 2, 0]
@@ -722,19 +722,19 @@ def get_coco_eval_result(gt_annos, dt_annos, current_classes):
         # mAP result: [num_class, num_diff, num_minoverlap]
         o_range = np.array(class_to_range[curcls])[[0, 2, 1]]
         o_range[1] = (o_range[2] - o_range[0]) / (o_range[1] - 1)
-        result += print_str((f"{class_to_name[curcls]} "
+        result += print_str(("{class_to_name[curcls]} " +
                              "coco AP@{:.2f}:{:.2f}:{:.2f}:".format(*o_range)))
-        result += print_str((f"bbox AP:{mAPbbox[j, 0]:.2f}, "
-                             f"{mAPbbox[j, 1]:.2f}, "
-                             f"{mAPbbox[j, 2]:.2f}"))
-        result += print_str((f"bev  AP:{mAPbev[j, 0]:.2f}, "
-                             f"{mAPbev[j, 1]:.2f}, "
-                             f"{mAPbev[j, 2]:.2f}"))
-        result += print_str((f"3d   AP:{mAP3d[j, 0]:.2f}, "
-                             f"{mAP3d[j, 1]:.2f}, "
-                             f"{mAP3d[j, 2]:.2f}"))
+        result += print_str(("bbox AP:{mAPbbox[j, 0]:.2f}, "+
+                             "{mAPbbox[j, 1]:.2f}, "+
+                             "{mAPbbox[j, 2]:.2f}"))
+        result += print_str(("bev  AP:{mAPbev[j, 0]:.2f}, "+
+                             "{mAPbev[j, 1]:.2f}, "+
+                             "{mAPbev[j, 2]:.2f}"))
+        result += print_str(("3d   AP:{mAP3d[j, 0]:.2f}, "+
+                             "{mAP3d[j, 1]:.2f}, "+
+                             "{mAP3d[j, 2]:.2f}"))
         if compute_aos:
-            result += print_str((f"aos  AP:{mAPaos[j, 0]:.2f}, "
-                                 f"{mAPaos[j, 1]:.2f}, "
-                                 f"{mAPaos[j, 2]:.2f}"))
+            result += print_str(("aos  AP:{mAPaos[j, 0]:.2f}, "+
+                                 "{mAPaos[j, 1]:.2f}, "+
+                                 "{mAPaos[j, 2]:.2f}"))
     return result

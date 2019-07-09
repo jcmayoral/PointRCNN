@@ -302,7 +302,7 @@ def get_label_anno(label_path):
         'location': [],
         'rotation_y': []
     })
-    with open(label_path, 'r') as f:
+    with open(str(label_path), 'r') as f:
         lines = f.readlines()
     # if len(lines) == 0 or len(lines[0]) < 15:
     #     content = []
