@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 import _init_path
 import os
 import numpy as np
@@ -135,6 +136,7 @@ def eval_one_epoch_rpn(model, dataloader, epoch_id, result_dir, logger):
     progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval')
 
     for data in dataloader:
+        logger.info("------------------------------DATA", data, type(data))
         sample_id_list, pts_rect, pts_features, pts_input = \
             data['sample_id'], data['pts_rect'], data['pts_features'], data['pts_input']
         sample_id = sample_id_list[0]
@@ -278,6 +280,7 @@ def eval_one_epoch_rcnn(model, dataloader, epoch_id, result_dir, logger):
 
     progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval')
     for data in dataloader:
+        logger.info("------------------------------DATA", data, type(data))
         sample_id = data['sample_id']
         cnt += 1
         assert args.batch_size == 1, 'Only support bs=1 here'
@@ -484,13 +487,14 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
 
     progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval')
     for data in dataloader:
+        logger.info("------------------------------DATA", data.keys(), type(data))
         cnt += 1
         sample_id, pts_rect, pts_features, pts_input = \
             data['sample_id'], data['pts_rect'], data['pts_features'], data['pts_input']
         batch_size = len(sample_id)
+        print (pts_input, type(pts_input), pts_input.shape)
         inputs = torch.from_numpy(pts_input).cuda(non_blocking=True).float()
         input_data = {'pts_input': inputs}
-
         # model inference
         ret_dict = model(input_data)
 
@@ -796,6 +800,7 @@ def repeat_eval_ckpt(root_result_dir, ckpt_dir):
 
     # create dataloader & network
     test_loader = create_dataloader(logger)
+    print("fadphgpisdhgpsihgaphpgidsa" ,test_loader.dataset.num_class)
     model = PointRCNN(num_classes=test_loader.dataset.num_class, use_xyz=True, mode='TEST')
     model.cuda()
 

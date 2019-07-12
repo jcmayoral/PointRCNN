@@ -54,7 +54,7 @@ class KittiDataset(torch_data.Dataset):
 
     def get_road_plane(self, idx):
         plane_file = os.path.join(self.plane_dir, '%06d.txt' % idx)
-        with open(plane_file, 'r') as f:
+        with open(str(plane_file), 'r') as f:
             lines = f.readlines()
         lines = [float(i) for i in lines[3].split()]
         plane = np.asarray(lines)

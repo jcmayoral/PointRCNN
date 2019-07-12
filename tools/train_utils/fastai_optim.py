@@ -84,7 +84,7 @@ def listify(p=None, q=None):
         p = [p]
     n = q if type(q) == int else len(p) if q is None else len(q)
     if len(p) == 1: p = p * n
-    assert len(p) == n, f'List len mismatch ({len(p)} vs {n})'
+    assert len(p) == n#, f'List len mismatch ({len(p)} vs {n})'
     return list(p)
 
 
@@ -126,7 +126,7 @@ class OptimWrapper():
         return self.create(opt_func, self.lr, layer_groups, wd=self.wd, true_wd=self.true_wd, bn_wd=self.bn_wd)
 
     def __repr__(self) -> str:
-        return f'OptimWrapper over {repr(self.opt)}.\nTrue weight decay: {self.true_wd}'
+        return 'OptimWrapper over {repr(self.opt)}.\nTrue weight decay: {self.true_wd}'
 
     # Pytorch optimizer methods
     def step(self) -> None:
