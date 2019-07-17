@@ -30,9 +30,9 @@ class BoundingBoxPublisher(rospy.Publisher):
         if frame_id:
             msg.header.frame_id = frame_id
 
-        msg.pose.position.x = data[0]
-        msg.pose.position.y = data[1]
-        msg.pose.position.z = data[2]
+        msg.pose.position.x = data[0].item()
+        msg.pose.position.y = data[1].item()
+        msg.pose.position.z = data[2].item()
 
         quaternion = self.euler_to_quaternion(0, 0, data[6].item())
         msg.pose.orientation.x = quaternion[0]
@@ -40,9 +40,9 @@ class BoundingBoxPublisher(rospy.Publisher):
         msg.pose.orientation.z = quaternion[2]
         msg.pose.orientation.w = quaternion[3]
 
-        msg.dimensions.x = data[3]
-        msg.dimensions.y = data[4]
-        msg.dimensions.z = data[5]
+        msg.dimensions.x = data[3].item()
+        msg.dimensions.y = data[4].item()
+        msg.dimensions.z = data[5].item()
 
         self.array.boxes.append(msg)
 

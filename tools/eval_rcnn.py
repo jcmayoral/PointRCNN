@@ -136,7 +136,7 @@ def eval_one_epoch_rpn(model, dataloader, epoch_id, result_dir, logger):
     progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval')
 
     for data in dataloader:
-        logger.info("------------------------------DATA", data, type(data))
+        logger.info("------------------------------DATA"% data)
         sample_id_list, pts_rect, pts_features, pts_input = \
             data['sample_id'], data['pts_rect'], data['pts_features'], data['pts_input']
         sample_id = sample_id_list[0]

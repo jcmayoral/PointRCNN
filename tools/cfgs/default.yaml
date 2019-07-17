@@ -35,7 +35,7 @@ RPN:
 
     # config of network structure
     BACKBONE: pointnet2_msg
-    USE_BN: True
+    USE_BN: False
     NUM_POINTS: 16384
 
     SA_CONFIG:
@@ -61,7 +61,7 @@ RPN:
     NMS_TYPE: normal
 
     # config of testing
-    SCORE_THRESH: 0.3
+    SCORE_THRESH: 2.0
 
 # 2. config of rcnn network
 RCNN:
@@ -113,16 +113,16 @@ RCNN:
     FOCAL_ALPHA: [0.25, 0.75]
     FOCAL_GAMMA: 2.0
     CLS_WEIGHT: [1.0, 1.0, 1.0]
-    CLS_FG_THRESH: 0.6
-    CLS_BG_THRESH: 0.45
-    CLS_BG_THRESH_LO: 0.05
-    REG_FG_THRESH: 0.55
+    CLS_FG_THRESH: 0.8
+    CLS_BG_THRESH: 0.9
+    CLS_BG_THRESH_LO: 0.25
+    REG_FG_THRESH: 0.75
     FG_RATIO: 0.5
     ROI_PER_IMAGE: 64
     HARD_BG_RATIO: 0.8
 
     # config of testing
-    SCORE_THRESH: 0.3
+    SCORE_THRESH: 0.6
     NMS_THRESH: 0.1
 
 # general training config

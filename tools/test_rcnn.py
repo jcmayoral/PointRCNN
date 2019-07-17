@@ -151,6 +151,7 @@ def eval_one_epoch_rcnn(model, epoch_id, result_dir, logger):
             cls_norm_scores = F.softmax(rcnn_cls, dim=1)
             raw_scores = rcnn_cls[:, pred_classes]
             norm_scores = cls_norm_scores[:, pred_classes]
+        print("AAAAAAAAAAAAAAAAAA", pred_classes)
 
         # evaluation
         disp_dict = {'mode': mode}
@@ -312,8 +313,8 @@ def eval_one_epoch_joint(model, data, epoch_id, result_dir, logger):
         os.makedirs(roi_output_dir, exist_ok=True)
         os.makedirs(refine_output_dir, exist_ok=True)
 
-    logger.info('---- EPOCH %s JOINT EVALUATION ----' % epoch_id)
-    logger.info('==> Output file: %s' % result_dir)
+    #logger.info('---- EPOCH %s JOINT EVALUATION ----' % epoch_id)
+    #logger.info('==> Output file: %s' % result_dir)
     model.eval()
 
     thresh_list = [0.1, 0.3, 0.5, 0.7, 0.9]
@@ -363,12 +364,11 @@ def eval_one_epoch_joint(model, data, epoch_id, result_dir, logger):
             norm_scores = torch.sigmoid(raw_scores)
             pred_classes = (norm_scores > cfg.RCNN.SCORE_THRESH).long()
         else:
-            print("VVVV")
             pred_classes = torch.argmax(rcnn_cls, dim=1).view(-1)
             cls_norm_scores = F.softmax(rcnn_cls, dim=1)
             raw_scores = rcnn_cls[:, pred_classes]
             norm_scores = cls_norm_scores[:, pred_classes]
-        print ("CLASSSES", print (pred_classes))
+
         # evaluation
         recalled_num = gt_num = rpn_iou = 0
         if not args.test:
@@ -416,18 +416,22 @@ def eval_one_epoch_joint(model, data, epoch_id, result_dir, logger):
 
                 """
             ros_publisher = BoundingBoxPublisher("bb")
-            print (pred_boxes3d.shape, "SHAPES ")
-            print ("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-            for j,i in enumerate(pred_boxes3d):
-                print (i.shape)
-                for pc in i:
-                    #print (j,boxes3d_to_bev_torch(i))
-                    ros_publisher.add_bb(pc, frame_id="velodyne")
+
+            inds = norm_scores > cfg.RCNN.SCORE_THRESH
+            inds = inds[0].view(-1)
+
+
+            for index in inds:
+                pred_boxes3d_selected = pred_boxes3d[0,index]
+                for pc in pred_boxes3d_selected:
+                    for p in pc:
+                        ros_publisher.add_bb(p, frame_id="velodyne")
+            print("Plotting")
             ros_publisher.custom_publish()
 
         disp_dict = {'mode': mode, 'recall': '%d/%d' % (total_recalled_bbox_list[3], total_gt_bbox)}
-        progress_bar.set_postfix(disp_dict)
-        progress_bar.update()
+        #progress_bar.set_postfix(disp_dict)
+        #progress_bar.update()
 
         if False:#args.save_result:
             # save roi and refine results
@@ -482,7 +486,7 @@ def eval_one_epoch_joint(model, data, epoch_id, result_dir, logger):
             save_kitti_format(cur_sample_id, calib, pred_boxes3d_selected, final_output_dir, scores_selected, image_shape)
             """
 
-    progress_bar.close()
+    #progress_bar.close()
     # dump empty files
     """
     split_file = os.path.join(dataset.imageset_dir, '..', '..', 'ImageSets', dataset.split + '.txt')
@@ -652,7 +656,7 @@ def ros_to_pc(ros_cloud):
 
 if __name__ == "__main__":
     rospy.init_node("test_rcnn")
-    ros_subscriber = PointCloudSubscriber("/velodyne_points/filtered")
+    ros_subscriber = PointCloudSubscriber("/velodyne_points")
 
     # merge config and log to file
     if args.cfg_file is not None:
